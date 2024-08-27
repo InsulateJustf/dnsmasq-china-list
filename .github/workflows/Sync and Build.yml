@@ -16,20 +16,25 @@ jobs:
         uses: actions/checkout@v4.1.7
 
       - name: Sync with upstream
-        run: |
-          git remote add upstream https://github.com/felixonmars/dnsmasq-china-list.git
-          git fetch upstream
-          git merge upstream/master
+        uses: TobKed/github-forks-sync-action@v0.2.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          upstream_repository: felixonmars/dnsmasq-china-list
+          target_repository: InsulateJustf/dnsmasq-china-list
+          upstream_branch: master
+          target_branch: master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
 
       - name: Run make
         run: make SERVER=domestic SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
 
       - name: Commit and push changes
-        run: |
-          git config --global user.name '${{ secrets.GH_USERNAME }}'
-          git config --global user.email '${{ secrets.GH_EMAIL }}'
-          git add .
-          git commit -m "Auto build and push on $(date +'%Y-%m-%d %H:%M:%S')"
-          git push origin master
+        uses: actions-js/push@v1.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: "Auto build and push on $(date +'%Y-%m-%d %H:%M:%S')"
+          branch: master
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
