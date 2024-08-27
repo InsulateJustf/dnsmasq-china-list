@@ -15,16 +15,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4.1.7
 
-      - name: Sync with upstream
-        uses: TobKed/github-forks-sync-action@v0.2.0
+      - name: Upstream Sync
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          upstream_repository: felixonmars/dnsmasq-china-list
-          target_repository: InsulateJustf/dnsmasq-china-list
-          upstream_branch: master
-          target_branch: master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          target_sync_branch: master
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+          upstream_repo_access_token: # optional
+          upstream_sync_repo: felixonmars/dnsmasq-china-list
+          upstream_sync_branch: master
           
 
       - name: Run make
