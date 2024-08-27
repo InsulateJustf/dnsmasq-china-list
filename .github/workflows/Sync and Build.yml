@@ -26,10 +26,10 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git config --global user.name '${{ secrets.GITHUB_USERNAME }}'
-          git config --global user.email '${{ secrets.GITHUB_EMAIL }}'
+          git config --global user.name '${{ secrets.GH_USERNAME }}'
+          git config --global user.email '${{ secrets.GH_EMAIL }}'
           git add .
           git commit -m "Auto build and push on $(date +'%Y-%m-%d %H:%M:%S')"
           git push origin master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
