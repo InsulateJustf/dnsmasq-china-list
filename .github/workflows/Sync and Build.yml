@@ -1,0 +1,35 @@
+name: Sync and Build
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # 每天凌晨2点运行
+  push:
+    branches:
+      - master
+
+jobs:
+  sync-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.7
+
+      - name: Sync with upstream
+        run: |
+          git remote add upstream https://github.com/felixonmars/dnsmasq-china-list.git
+          git fetch upstream
+          git merge upstream/master
+
+      - name: Run make
+        run: make SERVER=domestic SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name '${{ secrets.GITHUB_USERNAME }}'
+          git config --global user.email '${{ secrets.GITHUB_EMAIL }}'
+          git add .
+          git commit -m "Auto build and push on $(date +'%Y-%m-%d %H:%M:%S')"
+          git push origin master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
