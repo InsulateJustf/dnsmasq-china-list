@@ -32,7 +32,7 @@ jobs:
         uses: actions-js/push@v1.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          message: "Auto build and push on $(date +'%Y-%m-%d %H:%M:%S')"
+          message: "Auto build and push"
           branch: master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
