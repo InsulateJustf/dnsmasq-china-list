@@ -2,7 +2,7 @@ name: Sync and Build
 
 on:
   schedule:
-    - cron: '0 * * * *' # 每小时运行一次，根据需要调整计划
+    - cron: '0 2 * * *' # 每小时运行一次，根据需要调整计划
   workflow_dispatch:
 
 jobs:
