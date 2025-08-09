@@ -1,0 +1,35 @@
+name: Sync and Build
+
+on:
+  schedule:
+    - cron: '0 * * * *' # 每小时运行一次，根据需要调整计划
+  workflow_dispatch:
+
+jobs:
+  sync_and_build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v2
+        
+      - name: Upstream Sync
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.1
+        with:
+          target_sync_branch: master
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+          
+          upstream_sync_repo: felixonmars/dnsmasq-china-list
+          upstream_sync_branch: master
+
+      - name: Run make
+        run: make SERVER=default SMARTDNS_SPEEDTEST_MODE=tcp:80 smartdns-domain-rules
+
+      - name: Commit and push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: "Auto build and push"
+          branch: build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
