@@ -31,5 +31,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           message: "Auto build and push"
           branch: build
+          force: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
